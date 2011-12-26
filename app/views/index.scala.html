@@ -1,0 +1,34 @@
+@(barForm: Form[models.Bar])
+
+@import helper._
+
+@main {
+
+    @form(action = routes.Application.addBar()) {
+        @inputText(barForm("name"))
+        @inputText(barForm("location"))
+
+        <div>
+            <input type="submit" value="Create Bar">
+        </div>
+    }
+
+    <ul id="bars">
+        
+    </ul>
+
+    <script type="text/javascript">
+        $(function() {
+            $.get("/listBars", function(data) {
+                $.each(data, function(index, item) {
+                    var location = "";
+                    if (item.location) {
+                        location = " in " + item.location;
+                    }
+                    $("#bars").append("<li>Bar " + item.id.id + ": " + item.name + location + "</li>")
+                });
+            });
+        });
+    </script>
+
+}
