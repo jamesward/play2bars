@@ -1,0 +1,12 @@
+This is a re-write of James Ward tutorial - Play Framework, JPA, JSON, jQuery, & Heroku http://www.jamesward.com/2011/12/11/tutorial-play-framework-jpa-json-jquery-heroku
+
+Using Play 2.0 Beta.  It seems JSON support was only recently added to the play framework and so it is not in the play framework jar file.  Instead I copied the JSON class out of the play source code.  I added the dependencies to the project/Build.scala
+
+
+
+TODO
+
+- Move the Script block into a variable in the index
+- Basic Code Documentation
+- How do you setup a production database configuration?
+- What needs to be done to deploy to Heroku?

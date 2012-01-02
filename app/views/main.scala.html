@@ -1,0 +1,27 @@
+@(title: String)(content: Html)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>@title</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+        <script src="@routes.Assets.at("javascripts/jquery-1.6.4.min.js")" type="text/javascript"></script>
+
+        <script type="text/javascript">
+                $(function() {
+                    $.get("bars.json", function(data) {
+                        $.each(data, function(index, item) {
+                            $("#bars").append("<li>Bar " + item.name + "</li>");
+                        });
+                    });
+                });
+        </script>
+
+    </head>
+    <body>
+         <h1>@title</h1>
+        @content
+    </body>
+</html>

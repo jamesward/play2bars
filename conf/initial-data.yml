@@ -1,0 +1,8 @@
+# Bars
+bars:
+    - !!models.Bar
+        name:   Foo
+    - !!models.Bar
+        name:   Roo
+    - !!models.Bar
+        name:   Loo 

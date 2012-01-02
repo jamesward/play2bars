@@ -1,0 +1,23 @@
+@(message: String)(barForm: Form[Bar])
+
+@import helper._
+
+@main("Welcome to PlayBar 2") {
+    <h3>@message</h3>
+
+    @form(action = routes.Application.addBar, args = 'id -> "barForm") {
+
+        @inputText(
+            field = barForm("name"),
+            args = 'label -> "Name of bar?", 'placeholder -> "Foo Bar"
+        )
+
+        <p class="buttons">
+            <input type="submit">
+        <p>
+    }
+
+    <ul id="bars">
+
+    </ul>
+}
