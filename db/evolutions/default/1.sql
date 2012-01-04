@@ -12,9 +12,5 @@ create table bar (
 
 # --- !Downs
 
-SET REFERENTIAL_INTEGRITY FALSE;
-
-drop table if exists bar;
-
-SET REFERENTIAL_INTEGRITY TRUE;
+drop table if exists bar cascade;
 

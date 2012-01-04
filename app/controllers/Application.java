@@ -1,12 +1,14 @@
 package controllers;
 
+
 import models.Bar;
 import play.data.Form;
+import play.mvc.Content;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
 
-import static libs.Json.toJson;
+import static play.libs.Json.toJson;
 
 public class Application extends Controller {
 
@@ -17,17 +19,18 @@ public class Application extends Controller {
     public static Result addBar() {
         Form<Bar> form = form(Bar.class).bindFromRequest();
         if (form.hasErrors()) {
-            return badRequest(index.render("Error in Bar form.  Enter new Bar",form(Bar.class)));
+            return badRequest(index.render("Error in Bar form.  Enter new Bar", form(Bar.class)));
         } else {
             Bar bar = form.get();
             bar.save();
             return ok(
-                index.render("The bar  " + bar.name + " was saved.   Enter a new Bar:", form(Bar.class))
+                    index.render("The bar  " + bar.name + " was saved.   Enter a new Bar:", form(Bar.class))
             );
         }
     }
 
     public static Result listBars() {
-        return ok(toJson(Bar.findAll()));
+       Content content = toJson(Bar.findAll());
+       return ok(content);
     }
 }
