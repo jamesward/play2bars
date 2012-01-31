@@ -1,7 +1,5 @@
 logLevel := Level.Warn
 
-ebeanEnabled := true
-
 resolvers ++= Seq(
     DefaultMavenRepository,
     Resolver.url("Play", url("https://playframework2.ci.cloudbees.com/job/play2-integrationtest/ws/repository/local/"))(Resolver.ivyStylePatterns),

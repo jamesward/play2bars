@@ -9,6 +9,7 @@ object ApplicationBuild extends Build {
 
      val postgresql = "postgresql" % "postgresql" % "9.0-801.jdbc3"
 
+  ebeanEnabled := true
 
     val appDependencies = Seq(
       // Add your project dependencies here,
