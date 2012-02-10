@@ -4,16 +4,16 @@ import PlayProject._
 
 object ApplicationBuild extends Build {
 
-    val appName         = "play2bars-scala"
+    val appName         = "foobar"
     val appVersion      = "1.0"
 
     val appDependencies = Seq(
-      "org.scalaquery" % "scalaquery_2.9.0" % "0.9.4",
-      "com.codahale" %% "jerkson" % "0.5.0"
+      "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
     )
 
-    val main = PlayProject(appName, appVersion, appDependencies).settings(defaultScalaSettings:_*).settings(
-      // Add your own project settings here      
+    val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
+      resolvers += Resolver.file("localRepo", file("repository/local"))(Resolver.ivyStylePatterns)
     )
+
 
 }

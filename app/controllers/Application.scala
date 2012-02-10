@@ -3,23 +3,19 @@ package controllers
 import play.api._
 import play.api.mvc._
 import play.api.data._
-
-import format.Formats._
-
+import play.api.data.Forms._
+import com.codahale.jerkson._
 import anorm._
 
-import com.codahale.jerkson.Json._
+import models._
+import views._
 
-import models.Bar
+
 
 object Application extends Controller {
 
   val barForm = Form(
-    of(Bar.apply _)(
-      "id" -> ignored(NotAssigned),
-      "name" -> requiredText,
-      "location" -> optional(text)
-    )
+    single("name" -> nonEmptyText)
   )
 
   def index = Action {
@@ -29,8 +25,14 @@ object Application extends Controller {
   def addBar() = Action { implicit request =>
     barForm.bindFromRequest.fold(
       errors => BadRequest,
-      bar => {
-          Bar.create(bar)
+      {
+        case (name) =>
+          val bar =  Bar.create(
+            Bar(NotAssigned, name)
+          )
+          
+          Logger.info(bar.toString)
+          
           Redirect(routes.Application.index())
       }
     )
@@ -39,9 +41,9 @@ object Application extends Controller {
   def listBars() = Action {
     val bars = Bar.findAll()
 
-    val json = generate(bars)
+    val json = Json.generate(bars)
 
     Ok(json).as("application/json")
   }
-  
+
 }

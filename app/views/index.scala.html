@@ -1,34 +1,10 @@
-@(barForm: Form[models.Bar])
+@(form: play.api.data.Form[String])
 
-@import helper._
+@main("Welcome to Play 2.0") {
 
-@main {
+    <ul id="bars"></ul>
 
-    @form(action = routes.Application.addBar()) {
-        @inputText(barForm("name"))
-        @inputText(barForm("location"))
-
-        <div>
-            <input type="submit" value="Create Bar">
-        </div>
+    @helper.form(action = routes.Application.addBar) {
+        @helper.inputText(form("name"))
     }
-
-    <ul id="bars">
-        
-    </ul>
-
-    <script type="text/javascript">
-        $(function() {
-            $.get("/listBars", function(data) {
-                $.each(data, function(index, item) {
-                    var location = "";
-                    if (item.location) {
-                        location = " in " + item.location;
-                    }
-                    $("#bars").append("<li>Bar " + item.id.id + ": " + item.name + location + "</li>")
-                });
-            });
-        });
-    </script>
-
 }

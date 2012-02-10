@@ -6,19 +6,16 @@ import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
 
-case class Bar(id: Pk[Long], name: String, location: Option[String])
-
+case class Bar(id: Pk[Long], name: String)
 
 object Bar {
 
   val simple = {
-    get[Pk[Long]]("bar.id") ~/
-    get[String]("bar.name") ~/
-    get[Option[String]]("bar.location") ^^ {
-      case id~name~location => Bar(id, name, location)
+    get[Pk[Long]]("id") ~
+    get[String]("name") map {
+      case id~name => Bar(id, name)
     }
   }
-
 
   def findAll(): Seq[Bar] = {
     DB.withConnection { implicit connection =>
@@ -26,30 +23,15 @@ object Bar {
     }
   }
 
-
   def create(bar: Bar): Bar = {
     DB.withTransaction { implicit connection =>
-
-    // Get the project id
-      val id: Long = bar.id.getOrElse {
-        SQL("select next value for bar_seq").as(scalar[Long])
-      }
-
-      // Insert the project
       SQL(
         """
-          insert into bar values (
-            {id}, {name}, {location}
-          )
+          insert into bar(name) values ({name})
         """
       ).on(
-        'id -> id,
-        'name -> bar.name,
-        'location -> bar.location
-      ).executeUpdate()
-
-      bar.copy(id = Id(id))
-
+        'name -> bar.name
+      ).executeInsert(Bar.simple.single)
     }
   }
 
