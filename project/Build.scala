@@ -11,8 +11,8 @@ object ApplicationBuild extends Build {
       "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
     )
 
-    val main = PlayProject(appName, appVersion, appDependencies, mainLang = JAVA).settings(
-      resolvers += Resolver.file("localRepo", file("repository/local"))(Resolver.ivyStylePatterns)
+    val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
+
     )
 
 

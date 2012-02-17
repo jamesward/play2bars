@@ -23,7 +23,7 @@ object Bar {
     }
   }
 
-  def create(bar: Bar): Bar = {
+  def create(bar: Bar): Unit = {
     DB.withTransaction { implicit connection =>
       SQL(
         """
@@ -31,7 +31,7 @@ object Bar {
         """
       ).on(
         'name -> bar.name
-      ).executeInsert(Bar.simple.single)
+      ).executeUpdate()
     }
   }
 
