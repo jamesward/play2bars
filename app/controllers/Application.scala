@@ -1,14 +1,11 @@
 package controllers
 
-import play.api._
-import play.api.mvc._
-import play.api.data._
-import play.api.data.Forms._
-import com.codahale.jerkson._
-import anorm._
+import play.api.data.Form
+import play.api.data.Forms.{single, nonEmptyText}
+import play.api.mvc.{Action, Controller}
+import anorm.NotAssigned
 
-import models._
-import views._
+import models.Bar
 
 
 
@@ -27,16 +24,13 @@ object Application extends Controller {
       errors => BadRequest,
       {
         case (name) =>
-          val bar =  Bar.create(
-            Bar(NotAssigned, name)
-          )
-          
-          Logger.info(bar.toString)
-          
+          Bar.create(Bar(NotAssigned, name))
           Redirect(routes.Application.index())
       }
     )
   }
+
+  import com.codahale.jerkson.Json
 
   def listBars() = Action {
     val bars = Bar.findAll()
@@ -45,5 +39,5 @@ object Application extends Controller {
 
     Ok(json).as("application/json")
   }
-
+  
 }

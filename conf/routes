@@ -4,7 +4,6 @@
 
 # Home page
 GET     /                           controllers.Application.index
-
 POST    /addBar                     controllers.Application.addBar
 GET     /listBars                   controllers.Application.listBars
 

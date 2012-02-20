@@ -12,7 +12,7 @@ object Bar {
 
   val simple = {
     get[Pk[Long]]("id") ~
-    get[String]("name") map {
+      get[String]("name") map {
       case id~name => Bar(id, name)
     }
   }
@@ -24,12 +24,8 @@ object Bar {
   }
 
   def create(bar: Bar): Unit = {
-    DB.withTransaction { implicit connection =>
-      SQL(
-        """
-          insert into bar(name) values ({name})
-        """
-      ).on(
+    DB.withConnection { implicit connection =>
+      SQL("insert into bar(name) values ({name})").on(
         'name -> bar.name
       ).executeUpdate()
     }
