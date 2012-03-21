@@ -12,7 +12,7 @@ object Bar {
 
   val simple = {
     get[Pk[Long]]("id") ~
-      get[String]("name") map {
+    get[String]("name") map {
       case id~name => Bar(id, name)
     }
   }

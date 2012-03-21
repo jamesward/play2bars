@@ -8,7 +8,6 @@ import anorm.NotAssigned
 import models.Bar
 
 
-
 object Application extends Controller {
 
   val barForm = Form(
