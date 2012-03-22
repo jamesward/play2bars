@@ -4,7 +4,7 @@ import PlayProject._
 
 object ApplicationBuild extends Build {
 
-    val appName         = "play2bars-scala"
+    val appName         = "play2bars-java"
     val appVersion      = "1.0-SNAPSHOT"
 
     val appDependencies = Seq(
