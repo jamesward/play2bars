@@ -1,7 +1,6 @@
-logs
-project/project
-project/target
-target
-tmp
-*.iml
-
+/logs
+/project/project
+/project/target
+/target
+/*.iml
+/.idea

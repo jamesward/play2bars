@@ -3,9 +3,9 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index()
-GET     /bars.json                  controllers.Application.listBars
-POST    /                           controllers.Application.addBar
+GET     /                           controllers.Application.index
+GET     /listBars                   controllers.Application.listBars
+POST    /addBar                     controllers.Application.addBar
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

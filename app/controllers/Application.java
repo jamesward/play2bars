@@ -13,24 +13,18 @@ import static play.libs.Json.toJson;
 public class Application extends Controller {
 
    public static Result index() {
-      return ok(index.render("2 Enter the name of your new bar:", form(Bar.class)));
+      return ok(index.render(form(Bar.class)));
    }
 
    public static Result addBar() {
       Form<Bar> form = form(Bar.class).bindFromRequest();
-      if (form.hasErrors()) {
-         return badRequest(index.render("Error in Bar form.  Enter new Bar", form(Bar.class)));
-      } else {
-         Bar bar = form.get();
-         bar.save();
-         return ok(
-                 index.render("2 The bar  " + bar.name + " was saved.   Enter a new Bar:", form(Bar.class))
-         );
-      }
+      Bar bar = form.get();
+      bar.save();
+      return redirect(controllers.routes.Application.index());
    }
 
    public static Result listBars() {
-      JsonNode jsonNodes = toJson(Bar.findAll());
+      JsonNode jsonNodes = toJson(Bar.find.all());
       return ok(jsonNodes);
    }
 }
