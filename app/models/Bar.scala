@@ -2,33 +2,28 @@ package models
 
 import play.api.db._
 import play.api.Play.current
+import net.vz.mongodb.jackson.{Id, ObjectId}
+import org.codehaus.jackson.annotate.JsonProperty
+import play.modules.mongodb.jackson.MongoDB
+import reflect.BeanProperty
 
-import anorm._
-import anorm.SqlParser._
 
-case class Bar(id: Pk[Long], name: String)
+class Bar(@ObjectId @Id val id: String,
+          @BeanProperty @JsonProperty("name") val name: String) {
+  @ObjectId @Id def getId = id;
+}
 
 object Bar {
+  private lazy val db = MongoDB.collection("bars", classOf[Bar], classOf[String])
 
-  val simple = {
-    get[Pk[Long]]("id") ~
-    get[String]("name") map {
-      case id~name => Bar(id, name)
-    }
+  def create(bar: Bar) { db.save(bar) }
+  def findAll() = { db.find().toArray }
+
+  def apply() = {
+
   }
 
-  def findAll(): Seq[Bar] = {
-    DB.withConnection { implicit connection =>
-      SQL("select * from bar").as(Bar.simple *)
-    }
-  }
+  def unapply() = {
 
-  def create(bar: Bar): Unit = {
-    DB.withConnection { implicit connection =>
-      SQL("insert into bar(name) values ({name})").on(
-        'name -> bar.name
-      ).executeUpdate()
-    }
   }
-
 }
