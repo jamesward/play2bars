@@ -9,7 +9,7 @@ object ApplicationBuild extends Build {
 
     val appDependencies = Seq(
       "postgresql" % "postgresql" % "9.1-901-1.jdbc4",
-      "net.vz.mongodb.jackson" %% "play-mongo-jackson-mapper" % "1.0.0-rc.3"
+      "net.vz.mongodb.jackson" %% "play-mongo-jackson-mapper" % "1.0.0-SNAPSHOT"
     )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
