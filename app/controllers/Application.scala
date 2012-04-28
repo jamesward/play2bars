@@ -26,7 +26,7 @@ object Application extends Controller {
     } getOrElse BadRequest
   }
 
-  def listBars() = Action {
+  def getBars() = Action {
     val bars = Bar.findAll()
     val json = Json.generate(bars)
     Ok(json).as(JSON)
