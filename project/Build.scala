@@ -8,8 +8,8 @@ object ApplicationBuild extends Build {
     val appVersion      = "1.0-SNAPSHOT"
 
     val appDependencies = Seq(
-      "org.squeryl" %% "squeryl" % "0.9.5",
-      "com.jquery" % "jquery" % "1.7.1"
+      "com.jquery" % "jquery" % "1.7.1",
+      "net.vz.mongodb.jackson" %% "play-mongo-jackson-mapper" % "1.0.0-rc.4"
     )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
