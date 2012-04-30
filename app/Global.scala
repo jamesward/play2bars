@@ -9,11 +9,10 @@ import play.api.Application
 object Global extends GlobalSettings {
 
   override def onStart(app: Application) {
-
     SessionFactory.concreteFactory = app.configuration.getString("db.default.driver") match {
       case Some("org.h2.Driver") => Some(() => getSession(new H2Adapter, app))
       case Some("org.postgresql.Driver") => Some(() => getSession(new PostgreSqlAdapter, app))
-      case _ => None
+      case _ => sys.error("Database driver must be either org.h2.Driver or org.postgresql.Driver")
     }
   }
 
