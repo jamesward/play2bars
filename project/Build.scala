@@ -14,6 +14,7 @@ object ApplicationBuild extends Build {
     )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
+      resolvers += "webjars" at "http://webjars.github.com/m2"
       // Add your own project settings here      
     )
 
