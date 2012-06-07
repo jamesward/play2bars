@@ -122,7 +122,40 @@ If you reload the `localhost:9000` webpage you will now see that Play is asking 
 Test the Model
 --------------
 
-<todo>
+The testing support in Play 2 is very powerful and fits well with the Test Driven Development style.  Play 2 with Scala uses [specs2](http://etorreborre.github.com/specs2/) for testing.  Lets create a simple test for the `Bar` model object.  Create a new file named `test/BarSpec.scala` containing.
+
+    import models.{AppDB, Bar}
+    
+    import org.specs2.mutable._
+    import org.squeryl.PrimitiveTypeMode.inTransaction
+    
+    import play.api.test._
+    import play.api.test.Helpers._
+    
+    class BarSpec extends Specification {
+      
+      "Bar model" should {
+        "be creatable" in {
+          running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+            inTransaction {
+              val bar = AppDB.barTable insert Bar(Some("foo"))
+              bar.id mustNotEqual 0
+            }
+          }
+        }
+      }
+      
+    }
+
+This test uses a `FakeApplication` with an in-memory database to run the test.  By using the `FakeApplication` the Squeryl database connection will be configured using the `Global` object that was created earlier.  The body of the test simply creates a new instance of `Bar` and tests that the `id` is not equal to zero.  This happens in a Squeryl transaction.  You can run the test from the command line:
+
+    play test
+
+If you'd like to have the tests run whenever the source changes then run:
+
+    play ~test
+
+You can keep both the `~run` and `~test` commands running in the background.  This allows you to quickly test the application from both programmatic `specs2` tests and from manual browser tests.
 
 
 Creating Bars From a Web Form
@@ -200,8 +233,29 @@ Now that you have a good understanding of how to map request parameters to objec
 Test Adding Bars
 ----------------
 
-<todo>
+Create a new test for the `addBar` controller method by creating a new file named `test/ApplicationSpec.scala` containing:
 
+    import models.{AppDB, Bar}
+    
+    import org.specs2.mutable._
+    import org.squeryl.PrimitiveTypeMode.inTransaction
+    
+    import play.api.test._
+    import play.api.test.Helpers._
+    
+    class ApplicationSpec extends Specification {
+    
+      "respond to the addBar Action" in {
+        running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+          val result = controllers.Application.addBar(FakeRequest().withFormUrlEncodedBody("name" -> "FooBar"))
+          status(result) must equalTo(SEE_OTHER)
+          redirectLocation(result) must beSome(routes.Application.index.url)
+        }
+      }
+    
+    }
+
+This functional test uses a `FakeApplication` with an in-memory database.  The test makes a request to the `addBar` method on the `Application` controller with a form parameter named `name` and a value of `FooBar`.  Since success in this method is simply a redirect to the `index` page the status is checked to be `SEE_OTHER` and the redirect location is checked to be the URL of the `index` page.  Run this test with either `play test` or `play ~test` if you'd like to keep running tests when your code changes.
 
 
 Get Bars as JSON
@@ -240,7 +294,19 @@ The syntax of the query demonstrates the power of Squeryl’s type-safe query la
 Test JSON Service
 -----------------
 
-<todo>
+Now lets update the `test/ApplicationSpec.scala` test to have a new test for the JSON service.  Add the following:
+
+      "respond to the getBars Action" in {
+        running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+          inTransaction(AppDB.barTable insert Bar(Some("foo")))
+          
+          val result = controllers.Application.getBars(FakeRequest())
+          status(result) must equalTo(OK)
+          contentAsString(result) must contain("foo")
+        }
+      }
+
+Again this functional test uses a `FakeApplication` and an in-memory database.  It then creates a new `Bar` in the database and makes a request to the `getBars` method on the `Application` controller.  The response is tested to be `OK` (HTTP 200 status code) and to contain the name of the `Bar` that was created.  Like before run this test either `play test` or `play ~test` and you should now have three tests that pass.
 
 
 Display the Bars with CoffeeScript and jQuery
