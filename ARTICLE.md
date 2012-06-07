@@ -312,7 +312,21 @@ Again this functional test uses a `FakeApplication` and an in-memory database.  
 Display the Bars with CoffeeScript and jQuery
 ---------------------------------------------
 
-<todo>
+Now that we have a RESTful JSON service to get the list of `Bar` objects, lets use some CoffeeScript and jQuery to fetch and display them on the `index` page.  One of the new features in Play 2 is the asset compiler that can compile CoffeeScript to JavaScript, syntax check JavaScript, minify JavaScript, and compile LESS to CSS.
+
+Create a new file named `app/assets/javascripts/index.coffee` that contains:
+
+    $ ->
+      $.get "/bars", (data) ->
+        $.each data, (index, item) ->
+          $("#bars").append $("<li>").text item.name
+
+This CoffeeScript uses jQuery to make a `get` request to `/bars` and then iterates through each `bar` and adds it to the element on the page with an id of `bars`.  Now lets update the `app/views/index.scala.html` template to load this script and provide the `bars` element on the page.  Add the follow into the `main` section of the template:
+
+        <script src="@routes.Assets.at("javascripts/index.min.js")" type="text/javascript"></script>    
+        <ul id="bars"></ul>
+
+Notice that `src` of the script uses the `routes.Assets.at` function to get the URL to the `javascripts/index.min.js` file.  Yet, that file doesn't exist.  Play's asset compiler knows that it needs to create that minified file from compiling the `index.coffee` file.  Load the [localhost:9000](http://localhost:9000) webpage again, create a new `Bar` and you should see it displayed on the webpage.
 
 
 Deploy on Heroku
@@ -332,9 +346,9 @@ Heroku is a Polyglot Cloud Application Platform that provides a place to run Pla
         git add .
         git commit -m init
 
-3. The Heroku Toolbelt is a command line interface to Heroku.  [Install the Heroku Toolbelt](http://toolbelt.heroku.com)
+3. The Heroku Toolbelt is a command line interface to Heroku.  [Install the Heroku Toolbelt](http://toolbelt.heroku.com).
 
-4. [Signup for a Heroku account](http://heroku.com/signup)
+4. [Signup for a Heroku account](http://heroku.com/signup).
 
 5. Login to Heroku from the command line:
 
@@ -362,5 +376,16 @@ Congrats!  Your Play 2 app is now running on the cloud!
 Further Learning
 ----------------
 
-<todo>
-Link to src
+All of the source code for this project can be found on GitHub:  
+[https://github.com/jamesward/play2bars/blob/scala-squeryl](https://github.com/jamesward/play2bars/blob/scala-squeryl)
+
+When you local Play web server is running you can access Play's local documentation at:  
+[http://localhost:9000/@documentation](http://localhost:9000/@documentation)
+
+You can also find the Play documentation at:
+[http://www.playframework.org/documentation](http://www.playframework.org/documentation)
+
+To learn more about Heroku, visit the Heroku Dev Center:
+[http://devcenter.heroku.com](http://devcenter.heroku.com)
+
+We hope this was helpful, please let us know if you have any questions or problems.
