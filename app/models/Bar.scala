@@ -7,5 +7,5 @@ case class Bar(name: Option[String]) extends KeyedEntity[Long] {
 }
 
 object AppDB extends Schema {
-  val barTable = table[Bar]("BAR")
+  val barTable = table[Bar]("bar")
 }

@@ -24,8 +24,8 @@ object Application extends Controller {
 
   def getBars = Action {
     val json = inTransaction {
-      val bars = from(AppDB.barTable)(bar =>
-        select(bar)
+      val bars = from(AppDB.barTable)(barTable =>
+        select(barTable)
       )
       Json.generate(bars)
     }
