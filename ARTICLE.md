@@ -318,7 +318,45 @@ Display the Bars with CoffeeScript and jQuery
 Deploy on Heroku
 ----------------
 
-<todo>
+Heroku is a Polyglot Cloud Application Platform that provides a place to run Play 2 apps on the cloud.  To deploy this application on Heroku, follow these steps:
+
+1) First create a new file in the root directory named `Procfile` that contains:
+
+        web: target/start -Dhttp.port=${PORT} -DapplyEvolutions.default=true -Ddb.default.driver=org.postgresql.Driver -Ddb.default.url=$DATABASE_URL ${JAVA_OPTS}
+
+    That tells Heroku how to start the Play application.
+
+2) Heroku uses Git as the way to transfer files to Heroku.  [Install Git](http://git-scm.com/download You will need to create a new git) if you don't already have it. Then from the root directory of your project create a new Git repository for this project, add your files and commit them:
+
+        git init
+        git add .
+        git commit -m init
+
+3) The Heroku Toolbelt is a command line interface to Heroku.  [Install the Heroku Toolbelt](http://toolbelt.heroku.com)
+
+4) [Signup for a Heroku account](http://heroku.com/signup)
+
+5) Login to Heroku from the command line:
+
+        heroku login
+
+    This will walk you through setting up an SSH key for Git and associating the key with your Heroku account.
+
+6) Provision a new application on Heroku:
+
+        heroku create --stack cedar
+
+7) Now push this applicaiton to Heroku:
+
+        git push heroku master
+
+    Heroku will build the app with SBT and then run it on a [dyno](https://devcenter.heroku.com/articles/dynos).
+
+8) Open the application, now running on the cloud, in your browser:
+
+        heroku open
+
+Congrats!  Your Play 2 app is now running on the cloud!
 
 
 Further Learning
