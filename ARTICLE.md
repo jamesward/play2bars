@@ -382,10 +382,10 @@ All of the source code for this project can be found on GitHub:
 When you local Play web server is running you can access Play's local documentation at:  
 [http://localhost:9000/@documentation](http://localhost:9000/@documentation)
 
-You can also find the Play documentation at:
+You can also find the Play documentation at:  
 [http://www.playframework.org/documentation](http://www.playframework.org/documentation)
 
-To learn more about Heroku, visit the Heroku Dev Center:
+To learn more about Heroku, visit the Heroku Dev Center:  
 [http://devcenter.heroku.com](http://devcenter.heroku.com)
 
 We hope this was helpful, please let us know if you have any questions or problems.
