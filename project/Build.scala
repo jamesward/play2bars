@@ -8,8 +8,8 @@ object ApplicationBuild extends Build {
     val appVersion      = "1.0-SNAPSHOT"
 
     val appDependencies = Seq(
-      "org.squeryl" %% "squeryl" % "0.9.5",
-      "postgresql" % "postgresql" % "9.1-901-1.jdbc4",
+      "org.squeryl" %% "squeryl" % "0.9.5-2",
+      "postgresql" % "postgresql" % "8.3-606.jdbc4",
       "com.jquery" % "jquery" % "1.7.1"
     )
 
