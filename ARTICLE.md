@@ -31,12 +31,23 @@ Chose Scala as the language for the project.
 
 The Squeryl library needs to be added to the Play project.  We will also add the Postgres JDBC driver as a dependency because later we will deploy this project on the cloud with Heroku and the default database on Heroku is Postgres.
 
-Edit the `project/Build.scala` file and add the following dependencies:
+Edit the `project/Build.scala` file and update the dependencies:
 
     val appDependencies = Seq(
       "org.squeryl" %% "squeryl" % "0.9.5",
       "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
     )
+
+
+Then if you are using an Eclipse or IntelliJ Play can automatically create the project for you using either:
+
+  play idea
+
+or
+
+  play eclipsify
+
+Note that we created the project files after updating the dependencies, so the projects would be configured with the required libraries.  If the dependencies change in the future, just re-run the commands to create the projects.
 
 You can now start the application from within your project's root directory:
 
@@ -98,9 +109,11 @@ Now lets create a simple entity object that will be used to persist data into th
       val barTable = table[Bar]("bar")
     }
 
-This is a very simple entity that will store a list of `Bar` objects.  Each `Bar` has a name and an `id` property for the primary key.  The case class in Scala basically super charges a class adding a number of syntactic conveniences.  It also allows it to be used for pattern matching which can be quite handy when matching form values returned from the client.  The `AppDB` object is an instance of the `Schema` that Squeryl will map into the database.  In this case we are only defining one table that will be called `bar` in the database.  Because the schema is defined as an object, it makes it a singleton instance.
+This is a very simple entity that will store a list of `Bar` objects.  Each `Bar` has a name and an `id` property for the primary key.  The case class in Scala is immutable and basically super charges a class adding a number of syntactic conveniences.  It also allows it to be used for pattern matching which can be quite handy when matching form values returned from the client.  The `AppDB` object is an instance of the `Schema` that Squeryl will map into the database.  In this case we are only defining one table that will be called `bar` in the database.  Because the schema is defined as an object, it makes it a singleton instance.
 
-With Squeryl you can programatically create the database schema by calling the `AppDB.create` method.  However, it is a better approach to manually create the SQL scripts for doing database evolutions.  This allows us to have full control over the changes in our database schema and version the schema changes in case a rollback needs to happen.  Create a new file named `conf/evolutions/default/1.sql` containing:
+With Squeryl you can programatically create the database schema by calling the `AppDB.create` method.  However, a better approach is to manually create the SQL scripts (what play calls evolutions scripts).  Play will then to track your database schema evolutions by checking the database schema against these SQL scripts.  When Play detects the schema is out of date it, it will suggest applying this SQL script.  It only does this while in DEV mode, in PROD mode it applies the script before starting the application.  This allows us to have full control over the changes in our database schema and version the schema changes in case a rollback needs to happen.
+
+Create a new file named `conf/evolutions/default/1.sql` containing:
 
     # --- First database schema
     
@@ -147,9 +160,13 @@ The testing support in Play 2 is very powerful and fits well with the Test Drive
       
     }
 
-This test uses a `FakeApplication` with an in-memory database to run the test.  By using the `FakeApplication` the Squeryl database connection will be configured using the `Global` object that was created earlier.  The body of the test simply creates a new instance of `Bar` and tests that the `id` is not equal to zero.  This happens in a Squeryl transaction.  You can run the test from the command line:
+This test uses a `FakeApplication` with an in-memory database to run the test.  By using the `FakeApplication` the Squeryl database connection will be configured using the `Global` object that was created earlier.  The body of the test simply creates a new instance of `Bar` and tests that the `id` is not equal to zero.  This happens in a Squeryl transaction.  Different from Play 1, test are run from the command line using:
 
     play test
+
+If the tests worked, then you should see the following message in the Play STDOUT log:
+
+  [info] Passed: : Total 1, Failed 0, Errors 0, Passed 1, Skipped 0
 
 If you'd like to have the tests run whenever the source changes then run:
 
@@ -161,7 +178,9 @@ You can keep both the `~run` and `~test` commands running in the background.  Th
 Creating Bars From a Web Form
 -----------------------------
 
-Now lets add a basic web UI for creating new `Bar` objects.  First update the `app/controllers/Application.scala` file to contain:
+Now lets add a basic web UI for creating new `Bar` objects.  Note that this code will not compile until this entire section is completed.
+
+First update the `app/controllers/Application.scala` file to contain:
 
     package controllers
     
@@ -196,7 +215,7 @@ Now lets add a basic web UI for creating new `Bar` objects.  First update the `a
       
     }
 
-The `barForm` provides a mapping from a request parameter named `name` to the `name` property on the `Bar` case class (via it's constructor).  The `index` method has been updated to pass an instance of the `barForm` into the `index` template.  We will update that template next.  The `addBar` method binds the request parameters into an object named `bar` then in a transaction the `bar` is inserted into the database.  Then the user is redirected back to the index page.  If the request parameters could not be mapped to a `Bar` using the `barForm` then a `BadRequest` error is returned.
+The `barForm` provides a mapping from a request parameter named `name` to the `name` property on the `Bar` case class (via it's constructor).  The `index` method has been updated to pass an instance of the `barForm` into the `index` template.  We will update that template next.  The `addBar` method binds the request parameters into an object named `bar` then in a transaction the `bar` is inserted into the database.  Because Squeryl is not integrated into the Play Framework, database transactions need to be explicitly started using the `inTransaction` Squeryl function.  Then the user is redirected back to the index page.  If the request parameters could not be mapped to a `Bar` using the `barForm` then a `BadRequest` error is returned.
 
 Now we need to update the `app/views/index.scala.html` template to contain:
 
@@ -211,7 +230,9 @@ Now we need to update the `app/views/index.scala.html` template to contain:
     
     }
 
-The template now takes a `Form[Bar]` parameter which is passed from the `index` method on the `Application` controller.  Then in the body of the template a new HTML form is rendered using Play 2's form helper.  The form contains an HTML field for the `name` and a submit button.  Notice that the action of the form points to the route to the `Application` controller's `addBar` method.  But we haven't created a route yet, so edit the `conf/routes` file and add a new line with the following:
+The template now takes a `Form[Bar]` parameter which is passed from the `index` method on the `Application` controller.  Then in the body of the template a new HTML form is rendered using Play 2's form helper.  The form contains an HTML field for the `name` and a submit button.  Notice that the action of the form points to the route to the `Application` controller's `addBar` method.
+
+If you look in the console window at this point you will see the error "value addBar is not a member of controllers.ReverseApplication".  This is because the route file is compiled and the view is checked for a valid route.  But we haven't created a route yet, so edit the `conf/routes` file and add a new line with the following:
 
     POST    /bars                       controllers.Application.addBar
 
@@ -219,7 +240,7 @@ This creates a HTTP route that maps `POST` requests for the `/bars` URL to the `
 
 Now refresh `localhost:9000` in your browser and you should see the very basic form for adding new `Bar` objects.  If successful, after adding a new `Bar` the browser should just redirect back to the index page.
 
-Now that you have it working lets take a look back at the controller code and get a better understanding of how everything works.  To understand what the `addBar` method is doing it is helpful to first understand how the `implicit` keyword informs the compiler where to find the value from the surrounding scope.  The `implicit` keyword in Scala can be used either as an `implicit` function parameter or an `implicit` object conversion.  The two are quite different but both relate to how Scala resolves the definition.  In this case, `implicit` is used when you call one or more functions and need to pass the same value to all functions.  This strategy is useful in constructing APIs so that users do not have to always be explicit, but defaults can be used.
+Now that you have it working lets take a look back at the controller code and get a better understanding of how everything works.  To understand what the `addBar` method is doing it is helpful to first understand how the `implicit` keyword informs the compiler where to find the value from the surrounding scope.  In Scala the `implicit` keyword can be used either as an `implicit` function parameter or an `implicit` object conversion.  The two are quite different but both relate to how Scala resolves the definition.  In this case, `implicit` is used when you call one or more functions and need to pass the same value to all functions.  This strategy is useful in constructing APIs so that users do not have to always be explicit about what parameters are used, but rely on default values instead.
 
 In the case of `addBar` we specify request to be `implicit` because the `barForm.bindFromRequest` method takes a` play.api.mvc.Request` parameter that we no longer need to pass explicitly.  For reference, here is the method definition for the `Form.bindToRequest` method:
 
@@ -235,6 +256,7 @@ Test Adding Bars
 
 Create a new test for the `addBar` controller method by creating a new file named `test/ApplicationSpec.scala` containing:
 
+    import controllers.routes
     import models.{AppDB, Bar}
     
     import org.specs2.mutable._
@@ -286,7 +308,7 @@ http://localhost:9000/bars
 
 You should see a list of the `Bar` objects you've created serialized as JSON.
 
-Because Squeryl is not integrated into the Play Framework, database transactions need to be explicitly started.  This is done by first starting a transaction with the `inTransaction` Squeryl function.  Within the bounds of the transaction, all of the `Bar` entities are retrieved from the database.
+As mentioned previously, the transaction needs to be explicityl started with the `inTransaction` Squeryl function, even when selecting values from the database.  Then within the bounds of the transaction, all of the `Bar` entities are retrieved from the database.
 
 The syntax of the query demonstrates the power of Squeryl’s type-safe query language and the power of Scala to create DSLs.  The `from` function takes the type-safe reference to the table as the first parameter.  This is like the SQL `from` keyword.  The second parameter is a function that takes the table to query as a parameter and then specifies what to do on that table, in this case a `select`.  The `from` returns an iterable object which is set to the `bars` immutable val.  Then the `Json.generate` method iterates through the `bars` retrieved from the database and returns them.  The `json` val is then returned in a `Ok` (200 response) with the content type set to `application/json` (the value of `JSON`).
 
@@ -321,7 +343,7 @@ Create a new file named `app/assets/javascripts/index.coffee` that contains:
         $.each data, (index, item) ->
           $("#bars").append $("<li>").text item.name
 
-This CoffeeScript uses jQuery to make a `get` request to `/bars` and then iterates through each `bar` and adds it to the element on the page with an id of `bars`.  Now lets update the `app/views/index.scala.html` template to load this script and provide the `bars` element on the page.  Add the follow into the `main` section of the template:
+This CoffeeScript uses jQuery to make a `get` request to `/bars` and then iterates through each `bar` and adds it to the element on the page with an id of `bars`.  Now lets update the `app/views/index.scala.html` template to load this script and provide the `bars` element on the page.  Add the follow into the top part of the `main` section of the template :
 
         <script src="@routes.Assets.at("javascripts/index.min.js")" type="text/javascript"></script>    
         <ul id="bars"></ul>
