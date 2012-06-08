@@ -166,7 +166,7 @@ This test uses a `FakeApplication` with an in-memory database to run the test.  
 
 If the tests worked, then you should see the following message in the Play STDOUT log:
 
-  [info] Passed: : Total 1, Failed 0, Errors 0, Passed 1, Skipped 0
+    [info] Passed: : Total 1, Failed 0, Errors 0, Passed 1, Skipped 0
 
 If you'd like to have the tests run whenever the source changes then run:
 
