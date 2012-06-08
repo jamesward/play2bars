@@ -3,10 +3,13 @@
 # --- !Ups
 
 create table bar (
-    id    bigint not null primary key auto_increment,
-    name  varchar(128)
+  id serial primary key,
+  name varchar(128)
 );
+
+create sequence s_bar_id;
 
 # --- !Downs
 
-drop table if exists bar;
+drop table bar;
+drop sequence s_bar_id;
