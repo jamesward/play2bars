@@ -53,8 +53,8 @@ You can now start the application from within your project's root directory:
 
     play ~run
 
-Verify that the server is running by opening the following URL in your browser:  
-http://localhost:9000/
+Verify that the server is running by opening the following URL in your browser:  
+[http://localhost:9000](http://localhost:9000)
 
 For local testing we will use an in-memory "h2" database.  To setup Play to use that database, edit the `conf/application.conf` file and uncomment or add the following lines:
 
@@ -87,7 +87,7 @@ The final setup step is to provide Squeryl a database connection but we still wa
 
 On application startup the `db.default.driver` configuration parameter will be used to determine which driver to use to setup the database connection.  A new connection will be made and stored in Squeryl's SessionFactory.
 
-If you reload the `localhost:9000` webpage in your browser, everything should still be working and you should see the following message in the Play STDOUT log:
+If you reload the [http://localhost:9000](http://localhost:9000) webpage in your browser, everything should still be working and you should see the following message in the Play STDOUT log:
 
     [info] play - database [default] connected at jdbc:h2:mem:play
 
@@ -134,7 +134,7 @@ Create a new file named `conf/evolutions/default/1.sql` containing:
 
 This simple SQL script has two sections: "Ups" and "Downs".  The "Ups" section brings the database schema "up" to this version.  The "Downs" section takes the database down from this version.  Play will apply the database schema changes in order based on their names.  If you need to change the schema after you've deployed and done an evolution to `1.sql` then you'd create a `2.sql` file containing your changes.
 
-If you reload the `localhost:9000` webpage you will now see that Play is asking you if you want to apply the database evolutions.  Click the `Apply this script now!` button to run the "Ups" for `1.sql` on your local in-memory database.
+If you reload the [http://localhost:9000](http://localhost:9000) webpage you will now see that Play is asking you if you want to apply the database evolutions.  Click the `Apply this script now!` button to run the "Ups" for `1.sql` on your local in-memory database.
 
 Test the Model
 --------------
@@ -242,7 +242,7 @@ If you look in the console window at this point you will see the error "value ad
 
 This creates a HTTP route that maps `POST` requests for the `/bars` URL to the `addBar` method.
 
-Now refresh `localhost:9000` in your browser and you should see the very basic form for adding new `Bar` objects.  If successful, after adding a new `Bar` the browser should just redirect back to the index page.
+Now refresh [http://localhost:9000](http://localhost:9000) in your browser and you should see the very basic form for adding new `Bar` objects.  If successful, after adding a new `Bar` the browser should just redirect back to the index page.
 
 Now that you have it working lets take a look back at the controller code and get a better understanding of how everything works.  To understand what the `addBar` method is doing it is helpful to first understand how the `implicit` keyword informs the compiler where to find the value from the surrounding scope.  In Scala the `implicit` keyword can be used either as an `implicit` function parameter or an `implicit` object conversion.  The two are quite different but both relate to how Scala resolves the definition.  In this case, `implicit` is used when you call one or more functions and need to pass the same value to all functions.  This strategy is useful in constructing APIs so that users do not have to always be explicit about what parameters are used, but rely on default values instead.
 
@@ -308,7 +308,7 @@ Now add a new route to the `conf/routes` file:
 This maps `GET` requests for `/bars` to the `getBars` method.
 
 Try this out in your browser by loading:  
-http://localhost:9000/bars
+[http://localhost:9000/bars](http://localhost:9000/bars)
 
 You should see a list of the `Bar` objects you've created serialized as JSON.
 
@@ -352,7 +352,7 @@ This CoffeeScript uses jQuery to make a `get` request to `/bars` and then iterat
         <script src="@routes.Assets.at("javascripts/index.min.js")" type="text/javascript"></script>    
         <ul id="bars"></ul>
 
-Notice that `src` of the script uses the `routes.Assets.at` function to get the URL to the `javascripts/index.min.js` file.  Yet, that file doesn't exist.  Play's asset compiler knows that it needs to create that minified file from compiling the `index.coffee` file.  Load the [localhost:9000](http://localhost:9000) webpage again, create a new `Bar` and you should see it displayed on the webpage.
+Notice that `src` of the script uses the `routes.Assets.at` function to get the URL to the `javascripts/index.min.js` file.  Yet, that file doesn't exist.  Play's asset compiler knows that it needs to create that minified file from compiling the `index.coffee` file.  Load the [http://localhost:9000](http://localhost:9000) webpage again, create a new `Bar` and you should see it displayed on the webpage.
 
 
 Deploy on Heroku
@@ -362,7 +362,7 @@ Heroku is a Polyglot Cloud Application Platform that provides a place to run Pla
 
 1. First create a new file in the root directory named `Procfile` that contains:
 
-        web: target/start -Dhttp.port=${PORT} -DapplyEvolutions.default=true -Ddb.default.driver=org.postgresql.Driver -Ddb.default.url=$DATABASE_URL ${JAVA_OPTS}
+        web: target/start -Dhttp.port=${PORT} -DapplyEvolutions.default=true -Ddb.default.driver=org.postgresql.Driver -Ddb.default.url=${DATABASE_URL} ${JAVA_OPTS}
 
     That tells Heroku how to start the Play application.
 
