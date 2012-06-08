@@ -3,8 +3,8 @@
 # --- !Ups
 
 create table bar (
-  id                        SERIAL PRIMARY KEY,
-  name                      varchar(255) not null
+    id    bigint not null primary key auto_increment,
+    name  varchar(128)
 );
 
 # --- !Downs

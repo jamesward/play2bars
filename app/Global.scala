@@ -1,8 +1,10 @@
+import models.AppDB
 import org.squeryl.adapters.{H2Adapter, PostgreSqlAdapter}
 import org.squeryl.internals.DatabaseAdapter
 import org.squeryl.{Session, SessionFactory}
 import play.api.db.DB
 import play.api.GlobalSettings
+import org.squeryl.PrimitiveTypeMode._
 
 import play.api.Application
 
@@ -14,6 +16,7 @@ object Global extends GlobalSettings {
       case Some("org.postgresql.Driver") => Some(() => getSession(new PostgreSqlAdapter, app))
       case _ => sys.error("Database driver must be either org.h2.Driver or org.postgresql.Driver")
     }
+    inTransaction(AppDB.printDdl)
   }
 
   def getSession(adapter:DatabaseAdapter, app: Application) = Session.create(DB.getConnection()(app), adapter)
