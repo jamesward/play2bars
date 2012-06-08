@@ -41,11 +41,11 @@ Edit the `project/Build.scala` file and update the dependencies:
 
 Then if you are using an Eclipse or IntelliJ Play can automatically create the project for you using either:
 
-  play idea
+    play idea
 
 or
 
-  play eclipsify
+    play eclipsify
 
 Note that we created the project files after updating the dependencies, so the projects would be configured with the required libraries.  If the dependencies change in the future, just re-run the commands to create the projects.
 
