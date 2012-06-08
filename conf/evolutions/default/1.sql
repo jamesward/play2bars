@@ -3,7 +3,7 @@
 # --- !Ups
 
 create table bar (
-  id serial primary key,
+  id   serial primary key,
   name varchar(128)
 );
 
