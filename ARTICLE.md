@@ -34,7 +34,7 @@ The Squeryl library needs to be added to the Play project.  We will also add th
 Edit the `project/Build.scala` file and update the dependencies:
 
     val appDependencies = Seq(
-      "org.squeryl" %% "squeryl" % "0.9.5",
+      "org.squeryl" %% "squeryl" % "0.9.5-2",
       "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
     )
 
@@ -119,14 +119,18 @@ Create a new file named `conf/evolutions/default/1.sql` containing:
     
     # --- !Ups
     
+    create sequence s_bar_id;
+    
     create table bar (
-      id                        SERIAL PRIMARY KEY,
-      name                      varchar(255) not null
+      id    bigint DEFAULT nextval('s_bar_id'),
+      name  varchar(128)
     );
+    
     
     # --- !Downs
     
-    drop table if exists bar;
+    drop table bar;
+    drop sequence s_bar_id;
 
 This simple SQL script has two sections: "Ups" and "Downs".  The "Ups" section brings the database schema "up" to this version.  The "Downs" section takes the database down from this version.  Play will apply the database schema changes in order based on their names.  If you need to change the schema after you've deployed and done an evolution to `1.sql` then you'd create a `2.sql` file containing your changes.
 
