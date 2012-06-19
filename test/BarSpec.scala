@@ -1,20 +1,20 @@
 import models.{AppDB, Bar}
 
-import org.specs2.mutable._
+import org.scalatest.FlatSpec
+import org.scalatest.matchers.ShouldMatchers
+
 import org.squeryl.PrimitiveTypeMode.inTransaction
 
 import play.api.test._
 import play.api.test.Helpers._
 
-class BarSpec extends Specification {
+class BarSpec extends FlatSpec with ShouldMatchers {
   
-  "Bar model" should {
-    "be creatable" in {
-      running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
-        inTransaction {
-          val bar = AppDB.barTable insert Bar(Some("foo"))
-          bar.id mustNotEqual 0
-        }
+  "A Bar" should "be creatable" in {
+    running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+      inTransaction {
+        val bar = AppDB.barTable insert Bar(Some("foo"))
+        bar.id should not equal(0)
       }
     }
   }
