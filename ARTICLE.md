@@ -139,25 +139,38 @@ If you reload the [http://localhost:9000](http://localhost:9000) webpage you wil
 Test the Model
 --------------
 
-The testing support in Play 2 is very powerful and fits well with the Test Driven Development style.  Play 2 with Scala uses [specs2](http://etorreborre.github.com/specs2/) for testing.  Lets create a simple test for the `Bar` model object.  Create a new file named `test/BarSpec.scala` containing.
+The testing support in Play 2 is very powerful and fits well with the Test Driven Development style.  Play 2 with Scala uses [specs2](http://etorreborre.github.com/specs2/) as the default for testing but we prefer [ScalaTest](http://scalatest.org).  Lets create a simple test for the `Bar` model object.  Start by adding adding the ScalaTest dependency to the project and setting `testOptions` setting.  Update the `project/Build.scala` file to contain:
+
+    val appDependencies = Seq(
+      "org.scalatest" %% "scalatest" % "1.8" % "test",
+      "org.squeryl" %% "squeryl" % "0.9.5-2",
+      "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
+    )
+
+    val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
+      testOptions in Test := Nil
+      // Add your own project settings here
+    )
+
+Now create a new file named `test/BarSpec.scala` containing.
 
     import models.{AppDB, Bar}
     
-    import org.specs2.mutable._
+    import org.scalatest.FlatSpec
+    import org.scalatest.matchers.ShouldMatchers
+    
     import org.squeryl.PrimitiveTypeMode.inTransaction
     
     import play.api.test._
     import play.api.test.Helpers._
     
-    class BarSpec extends Specification {
+    class BarSpec extends FlatSpec with ShouldMatchers {
       
-      "Bar model" should {
-        "be creatable" in {
-          running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
-            inTransaction {
-              val bar = AppDB.barTable insert Bar(Some("foo"))
-              bar.id mustNotEqual 0
-            }
+      "A Bar" should "be creatable" in {
+        running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+          inTransaction {
+            val bar = AppDB.barTable insert Bar(Some("foo"))
+            bar.id should not equal(0)
           }
         }
       }
@@ -176,7 +189,7 @@ If you'd like to have the tests run whenever the source changes then run:
 
     play ~test
 
-You can keep both the `~run` and `~test` commands running in the background.  This allows you to quickly test the application from both programmatic `specs2` tests and from manual browser tests.
+You can keep both the `~run` and `~test` commands running in the background.  This allows you to quickly test the application from both programmatic unit / functional tests and from manual browser tests.
 
 
 Creating Bars From a Web Form
@@ -263,22 +276,25 @@ Create a new test for the `addBar` controller method by creating a new file name
     import controllers.routes
     import models.{AppDB, Bar}
     
-    import org.specs2.mutable._
+    import org.scalatest.FlatSpec
+    import org.scalatest.matchers.ShouldMatchers
+    
     import org.squeryl.PrimitiveTypeMode.inTransaction
     
+    import play.api.http.ContentTypes.JSON
     import play.api.test._
     import play.api.test.Helpers._
     
-    class ApplicationSpec extends Specification {
+    class ApplicationSpec extends FlatSpec with ShouldMatchers {
     
-      "respond to the addBar Action" in {
+      "A request to the addBar action" should "respond" in {
         running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
           val result = controllers.Application.addBar(FakeRequest().withFormUrlEncodedBody("name" -> "FooBar"))
-          status(result) must equalTo(SEE_OTHER)
-          redirectLocation(result) must beSome(routes.Application.index.url)
+          status(result) should equal (SEE_OTHER)
+          redirectLocation(result) should equal (Some(routes.Application.index.url))
         }
       }
-    
+      
     }
 
 This functional test uses a `FakeApplication` with an in-memory database.  The test makes a request to the `addBar` method on the `Application` controller with a form parameter named `name` and a value of `FooBar`.  Since success in this method is simply a redirect to the `index` page the status is checked to be `SEE_OTHER` and the redirect location is checked to be the URL of the `index` page.  Run this test with either `play test` or `play ~test` if you'd like to keep running tests when your code changes.
@@ -322,13 +338,13 @@ Test JSON Service
 
 Now lets update the `test/ApplicationSpec.scala` test to have a new test for the JSON service.  Add the following:
 
-      "respond to the getBars Action" in {
+      "A request to the getBars Action" should "respond with data" in {
         running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
           inTransaction(AppDB.barTable insert Bar(Some("foo")))
-          
+    
           val result = controllers.Application.getBars(FakeRequest())
-          status(result) must equalTo(OK)
-          contentAsString(result) must contain("foo")
+          status(result) should equal (OK)
+          contentAsString(result) should include ("foo")
         }
       }
 
