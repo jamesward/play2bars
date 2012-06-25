@@ -297,7 +297,7 @@ Create a new test for the `addBar` controller method by creating a new file name
       
     }
 
-This functional test uses a `FakeApplication` with an in-memory database.  The test makes a request to the `addBar` method on the `Application` controller with a form parameter named `name` and a value of `FooBar`.  Since success in this method is simply a redirect to the `index` page the status is checked to be `SEE_OTHER` and the redirect location is checked to be the URL of the `index` page.  Run this test with either `play test` or `play ~test` if you'd like to keep running tests when your code changes.
+This functional test uses a `FakeApplication` with an in-memory database.  The test makes a request to the `addBar` method on the `Application` controller with a form parameter named `name` and a value of `FooBar`.  Since success in this method is simply a redirect to the `index` page the status is checked to be the HTTP status code `SEE_OTHER` and the redirect location is checked to be the URL of the `index` page.  Run this test with either `play test` or `play ~test` if you'd like to keep running tests when your code changes.
 
 
 Get Bars as JSON
