@@ -16,11 +16,7 @@ create sequence bar_seq;
 
 # --- !Downs
 
-SET REFERENTIAL_INTEGRITY FALSE;
-
-drop table if exists bar;
-
-SET REFERENTIAL_INTEGRITY TRUE;
+drop table if exists bar cascade;
 
 drop sequence if exists bar_seq;
 
