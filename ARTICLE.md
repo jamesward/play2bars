@@ -139,7 +139,7 @@ If you reload the [http://localhost:9000](http://localhost:9000) webpage you wil
 Test the Model
 --------------
 
-The testing support in Play 2 is very powerful and fits well with the Test Driven Development style.  Play 2 with Scala uses [specs2](http://etorreborre.github.com/specs2/) as the default for testing but we prefer [ScalaTest](http://scalatest.org).  Lets create a simple test for the `Bar` model object.  Start by adding adding the ScalaTest dependency to the project and setting `testOptions` setting.  Update the `project/Build.scala` file to contain:
+The testing support in Play 2 is very powerful and fits well with the Test Driven Development style.  Play 2 with Scala uses [specs2](http://etorreborre.github.com/specs2/) as the default for testing but we prefer [ScalaTest](http://scalatest.org).  Lets create a simple test for the `Bar` model object.  Start by adding the ScalaTest dependency to the project and modifying the `testOptions` setting.  Update the `project/Build.scala` file to contain:
 
     val appDependencies = Seq(
       "org.scalatest" %% "scalatest" % "1.8" % "test",
