@@ -11,9 +11,17 @@ Deploy on Heroku
 
 4. Create a new Heroku app:
 
-        $ heroku create -s cedar
+        $ heroku create
 
-5. Push the local repo to Heroku:
+5. Add the MongoHQ Add-on
 
-        $ git push heroku master
+        $ heroku addons:add mongohq
+
+6. Push the local repo to Heroku:
+
+        $ git push heroku scala-mongodb:master
+
+7. Open the app:
+
+        $ heroku open
 
