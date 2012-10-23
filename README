@@ -1,3 +1,15 @@
-This is a re-write of James Ward tutorial - Play Framework, JPA, JSON, jQuery, & Heroku http://www.jamesward.com/2011/12/11/tutorial-play-framework-jpa-json-jquery-heroku
+Run on Heroku
+-------------
 
-Using Play 2.0 RC1
+1) Create a new app:
+
+        $ heroku create
+
+2) Push the app:
+
+        $ git push heroku java-ebean-mysql:master
+
+3) Add the ClearDB Add-on:
+
+        $ heroku addons:add cleardb:ignite
+
