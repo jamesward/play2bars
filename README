@@ -5,11 +5,10 @@ Run on Heroku
 
         $ heroku create
 
-2) Push the app:
+2) Add the Neo4j Addon
 
-        $ git push heroku java-ebean-mysql:master
+        $ heroku addons:add neo4j
 
-3) Add the ClearDB Add-on:
+3) Push the app:
 
-        $ heroku addons:add cleardb:ignite
-
+        $ git push heroku java-neo4j:master

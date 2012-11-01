@@ -1,14 +1,14 @@
-@(form: play.data.Form[Bar])
+@()
 
 @main("Welcome to Play 2.0") {
 
-    <script src="@routes.Assets.at("javascripts/index.min.js")" type="text/javascript"></script>
+    <script src='@routes.Assets.at("javascripts/index.min.js")' type='text/javascript'></script>
 
     <ul id="bars"></ul>
 
-    @helper.form(action = routes.Application.addBar) {
-        @helper.inputText(form("name"))
+    <form action="@routes.Application.addBar()" method="post">
+        <input name="name"/>
         <input type="submit"/>
-    }
+    </form>
 
 }
