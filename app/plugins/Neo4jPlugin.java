@@ -21,15 +21,8 @@ public class Neo4jPlugin extends Plugin {
     @Override
     public void onStart() {
 
-        if ((application.configuration().getString("neo4j.resturl") != null) &&
-                (application.configuration().getString("neo4j.username") != null) &&
-                (application.configuration().getString("neo4j.password") != null)) {
-
-            graphDb = new RestGraphDatabase(
-                    application.configuration().getString("neo4j.resturl"),
-                    application.configuration().getString("neo4j.username"),
-                    application.configuration().getString("neo4j.password"));
-
+        if (application.configuration().getString("neo4j.resturl") != null) {
+            graphDb = new RestGraphDatabase(application.configuration().getString("neo4j.resturl"));
             Logger.info("Using Neo4j via REST: " + application.configuration().getString("neo4j.resturl"));
         }
         else {
