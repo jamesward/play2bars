@@ -7,6 +7,9 @@ import play.Application;
 import play.Logger;
 import play.Plugin;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class Neo4jPlugin extends Plugin {
 
     private final Application application;
@@ -20,9 +23,19 @@ public class Neo4jPlugin extends Plugin {
 
     @Override
     public void onStart() {
-
-        if (application.configuration().getString("neo4j.resturl") != null) {
-            graphDb = new RestGraphDatabase(application.configuration().getString("neo4j.resturl"));
+        
+        URI restURI = null;
+        
+        try {
+            restURI = new URI(application.configuration().getString("neo4j.resturl"));
+        } catch (URISyntaxException e) {
+            // ignored
+        }
+        
+        if (restURI != null) {
+            String username = restURI.getUserInfo().split(":")[0];
+            String password = restURI.getUserInfo().split(":")[1];
+            graphDb = new RestGraphDatabase(restURI.toString(), username, password);
             Logger.info("Using Neo4j via REST: " + application.configuration().getString("neo4j.resturl"));
         }
         else {
