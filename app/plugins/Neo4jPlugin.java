@@ -28,7 +28,7 @@ public class Neo4jPlugin extends Plugin {
         
         try {
             restURI = new URI(application.configuration().getString("neo4j.resturl"));
-        } catch (URISyntaxException e) {
+        } catch (Exception e) {
             // ignored
         }
         
