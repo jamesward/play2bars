@@ -26,7 +26,7 @@ class ApplicationSpec extends FlatSpec with ShouldMatchers {
 
       val result = controllers.Application.getBars(FakeRequest())
       status(result) should equal (OK)
-      contentAsString(result) should include ("foo")
+      contentAsString(result) should include("foo")
     }
   }
   
