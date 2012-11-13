@@ -49,7 +49,7 @@ Local Setup (OS X Specific)
 
 5. Run MongoDB:
 
-		mongod --dpath=/apps/mongodb-osx-x86_64-2.2.1/data/db/
+		mongod --dbpath=/apps/mongodb-osx-x86_64-2.2.1/data/db/
 
 6. Run the play application - in the play2bars directory run:
 
