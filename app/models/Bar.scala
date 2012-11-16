@@ -1,21 +1,45 @@
 package models
 
-import play.api.Play.current
-import net.vz.mongodb.jackson.{Id, ObjectId}
-import org.codehaus.jackson.annotate.JsonProperty
-import play.modules.mongodb.jackson.MongoDB
-import reflect.BeanProperty
+import reactivemongo.bson.handlers.{BSONWriter, BSONReader}
+import reactivemongo.bson.{BSONObjectID, BSONDocument}
+import reactivemongo.bson.BSONString
+import play.api.libs.json.{Json, Writes}
 
-
-class Bar(@ObjectId @Id val id: String, @BeanProperty @JsonProperty("name") val name: String) {
-  @ObjectId
-  @Id
-  def getId = id;
+case class Bar(id: Option[BSONObjectID], name: String) {
 }
 
 object Bar {
-  private lazy val db = MongoDB.collection("bars", classOf[Bar], classOf[String])
 
-  def create(bar: Bar) { db.save(bar) }
-  def findAll() = { db.find().toArray }
+  def barToMap(bar: Bar) = (
+    Map(
+      "name" -> bar.name
+    )
+    )
+
+  implicit object BarListWrites extends Writes[List[Bar]] {
+    def writes(barList: List[Bar]) = Json.toJson(
+      barList.map{
+        bar =>
+          Map("name" -> bar.name)
+      }
+    )
+  }
+
+  implicit object BarBSONReader extends BSONReader[Bar] {
+    def fromBSON(document: BSONDocument): Bar = {
+      val doc = document.toTraversable
+      Bar(
+        doc.getAs[BSONObjectID]("_id"),
+        doc.getAs[BSONString]("name").get.value)
+    }
+  }
+
+  implicit object BarBSONWriter extends BSONWriter[Bar] {
+    def toBSON(bar: Bar) = {
+      BSONDocument(
+        "_id" -> bar.id.getOrElse(BSONObjectID.generate),
+        "name" -> BSONString(bar.name))
+    }
+  }
+
 }

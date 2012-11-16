@@ -9,11 +9,12 @@ object ApplicationBuild extends Build {
 
     val appDependencies = Seq(
       "com.jquery" % "jquery" % "1.7.1",
-      "net.vz.mongodb.jackson" %% "play-mongo-jackson-mapper" % "1.0.0"
+      "play.modules.reactivemongo" %% "play2-reactivemongo" % "0.1-SNAPSHOT"
     )
 
     val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
-      resolvers += "webjars" at "http://webjars.github.com/m2"
+      resolvers += "webjars" at "http://webjars.github.com/m2",
+      resolvers += "sgodbillon" at "https://bitbucket.org/sgodbillon/repository/raw/master/snapshots/"
     )
 
 }

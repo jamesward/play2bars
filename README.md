@@ -1,3 +1,9 @@
+This sample uses Play 2.1. The recommendation is to use [this snapshot](https://bitbucket.org/sgodbillon/repository/src/9f0c4e40cca1/play-2.1-SNAPSHOT.zip).
+
+It also depends on Scala 2.10, which is currently at [2.10.0-RC2](http://www.scala-lang.org/downloads#RC)
+
+Deployment on Heroku is not yet working.
+
 Deploy on Heroku
 ----------------
 
