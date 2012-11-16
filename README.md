@@ -2,6 +2,8 @@ This sample uses Play 2.1. The recommendation is to use [this snapshot](https://
 
 It also depends on Scala 2.10, which is currently at [2.10.0-RC2](http://www.scala-lang.org/downloads#RC)
 
+The sample uses the ReactiveMongo plugin for play which is configured in play.plugins.
+
 Deployment on Heroku is not yet working.
 
 Deploy on Heroku
