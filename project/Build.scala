@@ -14,6 +14,7 @@ object ApplicationBuild extends Build {
       "org.springframework" % "spring-orm" % "3.2.1.RELEASE",
       "org.springframework" % "spring-jdbc" % "3.2.1.RELEASE",
       "org.springframework" % "spring-tx" % "3.2.1.RELEASE",
+      "org.springframework" % "spring-test" % "3.2.1.RELEASE" % "test",
       "org.hibernate" % "hibernate-entitymanager" % "4.1.9.Final",
       "cglib" % "cglib" % "2.2.2"
     )
