@@ -4,6 +4,7 @@ import play.GlobalSettings;
 import play.Application;
 
 import configs.AppConfig;
+import configs.DataConfig;
 
 public class Global extends GlobalSettings {
 
@@ -11,7 +12,7 @@ public class Global extends GlobalSettings {
 
     @Override
     public void onStart(Application app) {
-        ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+        ctx = new AnnotationConfigApplicationContext(AppConfig.class, DataConfig.class);
     }
 
     @Override

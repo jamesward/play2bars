@@ -4,3 +4,6 @@
 /target
 /*.iml
 /.idea
+/.idea_modules
+/.settings
+/db.h2.db
