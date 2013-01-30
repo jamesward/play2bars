@@ -19,4 +19,4 @@ public class Global extends GlobalSettings {
         return ctx.getBean(clazz);
     }
 
-}gi
+}
