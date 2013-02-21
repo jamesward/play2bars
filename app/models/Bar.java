@@ -1,5 +1,7 @@
 package models;
 
+import play.data.validation.Constraints;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,6 +13,7 @@ public class Bar {
     @GeneratedValue
     public String id;
 
+    @Constraints.Required(message = "The name is required")
     public String name;
 
 }
