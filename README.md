@@ -5,6 +5,7 @@ This is a set of sample Play2 applications which utilize different technology st
 
     java-ebean        Java Controllers, EBean RDBMS Persistence, Scala Templates, HTML / jQuery / CoffeeScript Client
     java-neo4j        Java Controllers, Neo4j Persistence, Scala Templates, HTML / jQuery / CoffeeScript Client
+    java-spring       Java Controllers, Spring Dependency Injection, JPA Persistence, Scala Templates, HTML / jQuery / CoffeeScript Client
     scala-anorm       Scala Controllers, Anorm RDBMS Persistence, Scala Templates, HTML / jQuery / CoffeeScript Client
     scala-mongodb     Scala Controllers, MongoDB Persistence, Scala Templates, HTML / jQuery / CoffeeScript Client
     scala-squeryl     Scala Controllers, Squeryl RDBMS Persistence, Scala Templates, HTML / jQuery / CoffeeScript Client
