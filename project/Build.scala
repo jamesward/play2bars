@@ -9,6 +9,7 @@ object ApplicationBuild extends Build {
 
   val appDependencies = Seq(
     "org.scalatest" %% "scalatest" % "1.9.1" % "test",
+    "org.mockito" % "mockito-all" % "1.9.5" % "test",
     "com.escalatesoft.subcut" %% "subcut" % "2.0-SNAPSHOT",
     "org.squeryl" %% "squeryl" % "0.9.5-6",
     "org.webjars" % "webjars-play" % "2.1.0",

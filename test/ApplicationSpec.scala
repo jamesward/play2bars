@@ -1,33 +1,45 @@
-import controllers.routes
-import models.{AppDB, Bar}
+import com.escalatesoft.subcut.inject.BindingModule
+import configs.StandardConfig
+import controllers.{ApplicationBase, routes}
+import models.{BarDAO, AppDB, Bar}
 
+import org.mockito.ArgumentMatcher
 import org.scalatest.FlatSpec
 import org.scalatest.matchers.ShouldMatchers
 
-import org.squeryl.PrimitiveTypeMode.inTransaction
+import org.scalatest.mock.MockitoSugar
+import org.mockito.Mockito._
 
 import play.api.http.ContentTypes.JSON
 import play.api.test._
 import play.api.test.Helpers._
 
-class ApplicationSpec extends FlatSpec with ShouldMatchers {
+class ApplicationSpec extends FlatSpec with MockitoSugar with ShouldMatchers {
 
-  "A request to the addBar action" should "respond" in {
-    running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
-      val result = controllers.Application.addBar(FakeRequest().withFormUrlEncodedBody("name" -> "FooBar"))
-      status(result) should equal (SEE_OTHER)
-      redirectLocation(result) should equal (Some(routes.Application.index.url))
+  "An add and get through the DAO" should "call add once and get once" in {
+    StandardConfig.modifyBindings { implicit module =>
+      val theTestDAO = mock[BarDAO]
+      module.bind [BarDAO] toSingle theTestDAO
+
+      when(theTestDAO.getAllBars).thenReturn(List(Bar("Bruce's")))
+
+      val application = new TestApplication
+
+      application.addBar(FakeRequest().withFormUrlEncodedBody("name" -> "Bruce's"))
+      val getResult = application.getBars(FakeRequest())
+
+      contentAsString(getResult) should include("Bruce's")
+
+      import org.mockito.Matchers._
+      verify(theTestDAO).createBar(argThat(new ArgumentMatcher[Bar] {
+        def matches(obj: Any): Boolean = obj match {
+          case bar: Bar => bar.name == "Bruce's"
+        }
+      }))
+
+      verify(theTestDAO).getAllBars
     }
   }
-  
-  "A request to the getBars Action" should "respond with data" in {
-    running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
-      inTransaction(AppDB.barTable insert Bar(Some("foo")))
 
-      val result = controllers.Application.getBars(FakeRequest())
-      status(result) should equal (OK)
-      contentAsString(result) should include("foo")
-    }
-  }
-  
+  class TestApplication(implicit val bindingModule: BindingModule) extends ApplicationBase
 }
