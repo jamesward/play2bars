@@ -1,23 +1,24 @@
 import sbt._
 import Keys._
-import PlayProject._
+import play.Project._
 
 object ApplicationBuild extends Build {
 
-    val appName         = "play2bars"
-    val appVersion      = "1.0-SNAPSHOT"
+  val appName         = "play2bars-scala-subcut-squeryl"
+  val appVersion      = "1.0-SNAPSHOT"
 
-    val appDependencies = Seq(
-      "org.scalatest" %% "scalatest" % "1.8" % "test",
-      "org.squeryl" %% "squeryl" % "0.9.5-2",
-      "postgresql" % "postgresql" % "9.1-901-1.jdbc4",
-      "com.jquery" % "jquery" % "1.7.1"
-    )
+  val appDependencies = Seq(
+    "org.scalatest" %% "scalatest" % "1.9.1" % "test",
+    "com.escalatesoft.subcut" %% "subcut" % "2.0-SNAPSHOT",
+    "org.squeryl" %% "squeryl" % "0.9.5-6",
+    "org.webjars" % "webjars-play" % "2.1.0",
+    "org.webjars" % "bootstrap" % "2.3.1",
+    jdbc
+  )
 
-    val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
-      resolvers += "webjars" at "http://webjars.github.com/m2",
-      testOptions in Test := Nil
-      // Add your own project settings here
-    )
+  val main = play.Project(appName, appVersion, appDependencies).settings(
+    testOptions in Test := Nil,
+    resolvers += "Maven Central Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+  )
 
 }
