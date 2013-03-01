@@ -10,8 +10,6 @@ object StandardConfig extends NewBindingModule(module => {
   
   import module._
   
-  bind [Session] toSingle {
-    Session.create(DB.getConnection(), new H2Adapter)
-  }
-  
+  bind [Session] toSingle Session.create(DB.getConnection(), new H2Adapter)
+
 })

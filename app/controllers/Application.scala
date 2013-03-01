@@ -7,16 +7,16 @@ import play.api.data.Forms.{mapping, text, optional}
 
 import org.squeryl.PrimitiveTypeMode._
 import org.squeryl.Session
-import models.{BarDAO, AppDB, Bar}
-import com.escalatesoft.subcut.inject.Injectable
+import models.{BarDAOStandard, BarDAO, AppDB, Bar}
+import com.escalatesoft.subcut.inject._
 import play.api.libs.json.Json
 import models.BarCompanion._
 import configs.StandardConfig
 
 trait ApplicationBase extends Controller with Injectable {
 
-  lazy val barDao = injectOptional[BarDAO] getOrElse new BarDAO()(bindingModule)
-  
+  lazy val barDao = injectOptional[BarDAO] getOrElse new BarDAOStandard
+
   val barForm = Form(
     mapping(
       "name" -> text
