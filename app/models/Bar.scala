@@ -15,7 +15,13 @@ object BarCompanion {
   implicit val barWrites = Json.writes[Bar]
 }
 
-class BarDAO(implicit val bindingModule: BindingModule) extends Injectable {
+trait BarDAO {
+  def getAllBars: List[Bar]
+  def createBar(bar: Bar)
+}
+
+
+class BarDAOStandard(implicit val bindingModule: BindingModule) extends BarDAO with Injectable {
   
   def getAllBars: List[Bar] = {
     using(inject[Session]) {
