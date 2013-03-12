@@ -1,20 +1,22 @@
 import sbt._
 import Keys._
-import PlayProject._
+import play.Project._
 
 object ApplicationBuild extends Build {
 
-    val appName         = "play2bars"
-    val appVersion      = "1.0-SNAPSHOT"
+  val appName         = "play2bars"
+  val appVersion      = "1.0-SNAPSHOT"
 
-    val appDependencies = Seq(
-      "postgresql" % "postgresql" % "9.0-801.jdbc3",
-      "com.jquery" % "jquery" % "1.7.1"
-    )
+  val appDependencies = Seq(
+    jdbc,
+    anorm,
+    "postgresql" % "postgresql" % "9.0-801.jdbc3",
+    "org.webjars" % "webjars-play" % "2.1.0",
+    "org.webjars" % "bootstrap" % "2.1.1"
+  )
 
-    val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
-      resolvers += "webjars" at "http://webjars.github.com/m2"
-      // Add your own project settings here      
-    )
+  val main = play.Project(appName, appVersion, appDependencies).settings(
+    // Add your own project settings here      
+  )
 
 }

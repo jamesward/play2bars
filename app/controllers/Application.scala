@@ -3,13 +3,14 @@ package controllers
 import play.api.data.Form
 import play.api.data.Forms.{single, nonEmptyText}
 import play.api.mvc.{Action, Controller}
-import anorm.NotAssigned
-import com.codahale.jerkson.Json
+import anorm.{Pk, NotAssigned}
 
 import models.Bar
+import play.api.libs.json.Json
 
 
 object Application extends Controller {
+  implicit val barWrites = Json.writes[Bar]
 
   val barForm = Form(
     single("name" -> nonEmptyText)
@@ -21,15 +22,14 @@ object Application extends Controller {
 
   def addBar() = Action { implicit request =>
     barForm.bindFromRequest.value map { name =>
-      Bar.create(Bar(NotAssigned, name))
+      Bar.create(Bar(0, name))
       Redirect(routes.Application.index())
     } getOrElse BadRequest
   }
 
   def getBars() = Action {
     val bars = Bar.findAll()
-    val json = Json.generate(bars)
-    Ok(json).as(JSON)
+    Ok(Json.toJson(bars)).as(JSON)
   }
   
 }
