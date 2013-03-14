@@ -29,7 +29,7 @@ object Application extends Controller {
 
   def getBars() = Action {
     val bars = Bar.findAll()
-    Ok(Json.toJson(bars)).as(JSON)
+    Ok(Json.toJson(bars))
   }
   
 }
