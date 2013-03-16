@@ -13,11 +13,11 @@ import static play.libs.Json.toJson;
 public class Application extends Controller {
 
    public static Result index() {
-      return ok(index.render(form(Bar.class)));
+      return ok(index.render(Form.form(Bar.class)));
    }
 
    public static Result addBar() {
-      Form<Bar> form = form(Bar.class).bindFromRequest();
+      Form<Bar> form = Form.form(Bar.class).bindFromRequest();
       Bar bar = form.get();
       bar.save();
       return redirect(controllers.routes.Application.index());

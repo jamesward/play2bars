@@ -1,4 +1,4 @@
-@(form: play.data.Form[Bar])
+@(myForm: play.data.Form[Bar])
 
 @main("Welcome to Play 2.0") {
 
@@ -7,7 +7,7 @@
     <ul id="bars"></ul>
 
     @helper.form(action = routes.Application.addBar) {
-        @helper.inputText(form("name"))
+        @helper.inputText(myForm("name"))
         <input type="submit"/>
     }
 
