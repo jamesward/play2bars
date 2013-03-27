@@ -3,13 +3,13 @@ package controllers
 import play.api.data.Form
 import play.api.data.Forms.{single, nonEmptyText}
 import play.api.mvc.{Action, Controller}
-import anorm.{Pk, NotAssigned}
 
 import models.Bar
 import play.api.libs.json.Json
 
 
 object Application extends Controller {
+  
   implicit val barWrites = Json.writes[Bar]
 
   val barForm = Form(
