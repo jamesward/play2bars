@@ -2,12 +2,12 @@ package controllers
 
 import play.api.mvc._
 
-import com.codahale.jerkson.Json
 import play.api.data.Form
 import play.api.data.Forms.{mapping, text, optional}
 
 import org.squeryl.PrimitiveTypeMode._
 import models.{AppDB, Bar}
+import play.api.libs.json.Json
 
 
 object Application extends Controller {
@@ -23,13 +23,14 @@ object Application extends Controller {
   }
 
   def getBars = Action {
+    implicit val barWrites = Json.writes[Bar]
     val json = inTransaction {
       val bars = from(AppDB.barTable)(barTable =>
         select(barTable)
       )
-      Json.generate(bars)
+      Json.toJson(bars)
     }
-    Ok(json).as(JSON)
+    Ok(json)
   }
 
   def addBar = Action { implicit request =>

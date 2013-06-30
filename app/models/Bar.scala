@@ -1,6 +1,7 @@
 package models
 
 import org.squeryl.{Schema, KeyedEntity}
+import play.api.libs.json.Writes
 
 case class Bar(name: Option[String]) extends KeyedEntity[Long] {
   val id: Long = 0
