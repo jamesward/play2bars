@@ -9,6 +9,7 @@ object ApplicationBuild extends Build {
 
     val appDependencies = Seq(
       jdbc,
+      "mysql" % "mysql-connector-java" % "5.1.21",
       "org.squeryl" %% "squeryl" % "0.9.5-6",
       "postgresql" % "postgresql" % "9.1-901-1.jdbc4",
       "org.webjars" %% "webjars-play" % "2.1.0-2",
@@ -17,7 +18,8 @@ object ApplicationBuild extends Build {
   )
 
     val main = play.Project(appName, appVersion, appDependencies).settings(
-      testOptions in Test := Nil
+      testOptions in Test := Nil,
+      javaOptions in Test += "-Dconfig.file=conf/test.conf"
       // Add your own project settings here
     )
 

@@ -2,10 +2,8 @@
 
 # --- !Ups
 
-create sequence s_bar_id;
-
 create table bar (
-  id    bigint DEFAULT nextval('s_bar_id'),
+  id    bigint AUTO_INCREMENT PRIMARY KEY,
   name  varchar(128)
 );
 
@@ -13,4 +11,3 @@ create table bar (
 # --- !Downs
 
 drop table bar;
-drop sequence s_bar_id;
