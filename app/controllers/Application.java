@@ -21,9 +21,13 @@ public class Application {
 
     public Result addBar() {
         Form<Bar> form = Form.form(Bar.class).bindFromRequest();
-        Bar bar = form.get();
-        barService.addBar(bar);
-        return play.mvc.Controller.redirect(controllers.routes.Application.index());
+		if(form.hasErrors()){
+			return play.mvc.Controller.badRequest(index.render(form));
+		} else {
+			Bar bar = form.get();
+			barService.addBar(bar);
+			return play.mvc.Controller.redirect(controllers.routes.Application.index());
+		}
     }
 
     public Result listBars() {

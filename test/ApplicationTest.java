@@ -50,6 +50,17 @@ public class ApplicationTest {
             }
         });
     }
+	
+	@Test
+    public void callAddBarEmpty() {
+        running(fakeApplication(), new Runnable() {
+            public void run() {
+                Result result = callAction(controllers.routes.ref.Application.addBar());
+                assertThat(status(result)).isEqualTo(BAD_REQUEST);
+				assertThat(contentAsString(result)).contains("The name is required");
+            }
+        });
+    }
 
     @Test
     public void callListBars() {
