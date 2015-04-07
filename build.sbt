@@ -12,9 +12,10 @@ libraryDependencies ++= Seq(
 
   "com.github.mauricio"  %% "postgresql-async"              % "0.2.16",
   "org.scalikejdbc"      %% "scalikejdbc-async"             % "0.5.5",
-  "org.scalikejdbc"      %% "scalikejdbc-async-play-plugin" % "0.5.5",
-
-  "org.webjars"          %  "bootstrap"                     % "3.3.2"
+  "org.scalikejdbc"      %% "scalikejdbc-async-play-plugin" % "0.5.5"
 )
+
+libraryDependencies += "org.webjars" % "bootstrap" % "3.3.2"
+
 
 pipelineStages := Seq(digest, gzip)
