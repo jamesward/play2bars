@@ -7,6 +7,6 @@ Deploy on Heroku: [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https
 
 Run locally:
 
-    ./sbt ~run
-
-Open: [http://localhost:9000](http://localhost:9000)
+1. Start a local Postgres DB
+1. Run the app: `./sbt ~run`
+1. Open: [http://localhost:9000](http://localhost:9000)
