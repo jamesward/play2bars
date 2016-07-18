@@ -1,0 +1,17 @@
+{
+  "name": "play2bars-java-ebean",
+  "description": "Play2Bars Java EBean",
+  "repository": "https://github.com/jamesward/play2bars",
+  "website": "http://www.jamesward.com/",
+  "keywords": ["play framework", "java"],
+  "success_url": "/",
+  "env": {
+    "CRYPTO_SECRET": {
+      "description": "A secret key for crypto and signed cookies.",
+      "generator": "secret"
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ]
+}

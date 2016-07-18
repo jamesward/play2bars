@@ -4,23 +4,13 @@
 # --- !Ups
 
 create table bar (
-  id                        varchar(255) not null,
-  name                      varchar(255),
-  constraint pk_bar primary key (id))
-;
-
-create sequence bar_seq;
-
-
+  id                            uuid not null,
+  name                          varchar(255),
+  constraint pk_bar primary key (id)
+);
 
 
 # --- !Downs
 
-SET REFERENTIAL_INTEGRITY FALSE;
-
-drop table if exists bar;
-
-SET REFERENTIAL_INTEGRITY TRUE;
-
-drop sequence if exists bar_seq;
+drop table if exists bar cascade;
 

@@ -1,18 +1,19 @@
 package models;
 
-import play.db.ebean.Model;
+import com.avaje.ebean.Model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.UUID;
 
 @Entity
 public class Bar extends Model {
 
     @Id
-    public String id;
+    public UUID id;
 
     public String name;
 
-    public static Model.Finder<String, Bar> find = new Model.Finder(String.class, Bar.class);
+    public static Finder<String, Bar> find = new Finder<>(Bar.class);
 
 }
