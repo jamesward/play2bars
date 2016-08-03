@@ -1,9 +1,9 @@
 Play2Bars
 ---------
 
-A sample application for Play Framework & EBean.
+A sample application for Play Framework & JPA.
 
-Deploy on Heroku: [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/jamesward/play2bars/tree/java-ebean)
+Deploy on Heroku: [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/jamesward/play2bars/tree/java-jpa)
 
 Run locally:
 
