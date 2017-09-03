@@ -1,17 +1,15 @@
-@()
+@()(implicit request: RequestHeader)
+@import play.filters.csrf.CSRF
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <title>Reactive Postgres</title>
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
         <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("lib/bootstrap/css/bootstrap.min.css")">
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.versioned("stylesheets/index.css")">
         <script src="@routes.Assets.versioned("lib/jquery/jquery.min.js")"></script>
         <script src="@routes.Assets.versioned("javascripts/index.js")"></script>
-        <style>
-            body {
-                padding-top: 60px;
-            }
-        </style>
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -26,8 +24,11 @@
             <ul id="bars"></ul>
 
             <form action="@routes.Application.createBar()" method="post">
+                @for(token <- CSRF.getToken) {
+                    <input type="hidden" name="csrfToken" value="@token.value">
+                }
                 <input name="name">
-                <input type="submit"/>
+                <input type="submit">
             </form>
         </div>
     </body>

@@ -1,26 +1,29 @@
 package controllers
 
 
-import models.Bar
+import javax.inject.Inject
+
+import models.{Bar, BarDB}
 import play.api.libs.json.Json
 import play.api.mvc._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
-object Application extends Controller {
+class Application @Inject() (barDB: BarDB) extends InjectedController {
 
-  def index = Action {
+  def index = Action { implicit request =>
     Ok(views.html.index())
   }
 
   def getBars = Action.async {
-    Bar.findAll.map { bars =>
+    barDB.findAll().map { bars =>
       Ok(Json.toJson(bars))
     }
   }
 
-  def createBar = Action.async(parse.urlFormEncoded) { request =>
-    Bar.create(request.body("name").head).map { bar =>
+  def createBar = Action.async(parse.formUrlEncoded) { request =>
+    barDB.create(request.body("name").head).map { bar =>
       Redirect(routes.Application.index())
     }
   }

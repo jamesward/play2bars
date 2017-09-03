@@ -1,38 +1,38 @@
 package models
 
-import play.api.libs.json.Json
-import scalikejdbc.WrappedResultSet
-import scalikejdbc._
-import scalikejdbc.async._
-import scalikejdbc.async.FutureImplicits._
+import javax.inject.Inject
 
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import modules.Database
+import play.api.libs.json.{Json, Writes}
+
+import scala.concurrent.{ExecutionContext, Future}
 
 case class Bar(id: Long, name: String)
 
-object Bar extends SQLSyntaxSupport[Bar] {
+object Bar {
+  implicit val jsonWrites: Writes[Bar] = Json.writes[Bar]
+}
 
-  implicit val jsonFormat = Json.format[Bar]
+class BarDB @Inject() (database: Database) (implicit executionContext: ExecutionContext) {
 
-  override val columnNames = Seq("id", "name")
+  import database.ctx._
 
-  lazy val b = Bar.syntax
-
-  def db(b: SyntaxProvider[Bar])(rs: WrappedResultSet): Bar = db(b.resultName)(rs)
-
-  def db(b: ResultName[Bar])(rs: WrappedResultSet): Bar = Bar(
-    rs.long(b.id),
-    rs.string(b.name)
-  )
-
-  def create(name: String)(implicit session: AsyncDBSession = AsyncDB.sharedSession): Future[Bar] = {
-    val sql = withSQL(insert.into(Bar).namedValues(column.name -> name).returningId)
-    sql.updateAndReturnGeneratedKey().map(id => Bar(id, name))
+  def findAll(): Future[Seq[Bar]] = {
+    run {
+      quote {
+        query[Bar]
+      }
+    }
   }
 
-  def findAll(implicit session: AsyncDBSession = AsyncDB.sharedSession): Future[List[Bar]] = {
-    withSQL(select.from[Bar](Bar as b)).map(Bar.db(b))
+  def create(name: String): Future[Bar] = {
+    val bar = Bar(0L, name)
+
+    val queryResult = run {
+      query[Bar].insert(lift(bar)).returning(_.id)
+    }
+
+    queryResult.map(id => bar.copy(id = id))
   }
 
 }

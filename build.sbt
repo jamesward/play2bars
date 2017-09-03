@@ -1,21 +1,18 @@
-name := "play2bars-scalikejdbc-async"
-
-version := "1.0-SNAPSHOT"
-
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.11.6"
+name := "play2bars-scala-quill"
+
+scalaVersion := "2.12.3"
 
 libraryDependencies ++= Seq(
-  "org.postgresql"       %  "postgresql"                    % "9.3-1102-jdbc41",
-  "com.github.tototoshi" %% "play-flyway"                   % "1.2.0",
+  guice,
+  jdbc,
+  evolutions,
+  "org.postgresql" % "postgresql" % "42.1.4",
 
-  "com.github.mauricio"  %% "postgresql-async"              % "0.2.16",
-  "org.scalikejdbc"      %% "scalikejdbc-async"             % "0.5.5",
-  "org.scalikejdbc"      %% "scalikejdbc-async-play-plugin" % "0.5.5"
+  "io.getquill" %% "quill-async-postgres" % "1.3.0",
+
+  "org.webjars" % "bootstrap" % "3.3.2"
 )
-
-libraryDependencies += "org.webjars" % "bootstrap" % "3.3.2"
-
 
 pipelineStages := Seq(digest, gzip)
