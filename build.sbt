@@ -10,7 +10,7 @@ libraryDependencies ++= Seq(
   evolutions,
   "org.postgresql" % "postgresql" % "42.1.4",
 
-  "io.getquill" %% "quill-async-postgres" % "1.3.0",
+  "io.getquill" %% "quill-async-postgres" % "2.0.0",
 
   "org.webjars" % "bootstrap" % "3.3.2"
 )
