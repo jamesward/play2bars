@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS bar;
+CREATE TABLE bar
+(
+    id   SERIAL PRIMARY KEY,
+    name VARCHAR NOT NULL
+);

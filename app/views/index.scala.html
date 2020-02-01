@@ -1,4 +1,7 @@
-@()
+@()(implicit request: RequestHeader)
+
+@import helper._
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -25,10 +28,11 @@
         <div class="container">
             <ul id="bars"></ul>
 
-            <form action="@routes.Application.createBar()" method="post">
+            @form(routes.Application.createBar()) {
+                @CSRF.formField
                 <input name="name">
                 <input type="submit"/>
-            </form>
+            }
         </div>
     </body>
 </html>

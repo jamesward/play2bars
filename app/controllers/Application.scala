@@ -1,15 +1,16 @@
 package controllers
 
 
+import javax.inject.Inject
 import models.Bar
 import play.api.libs.json.Json
 import play.api.mvc._
+
 import scala.concurrent.ExecutionContext.Implicits.global
 
+class Application @Inject() extends InjectedController {
 
-object Application extends Controller {
-
-  def index = Action {
+  def index = Action { implicit request =>
     Ok(views.html.index())
   }
 
@@ -19,8 +20,8 @@ object Application extends Controller {
     }
   }
 
-  def createBar = Action.async(parse.urlFormEncoded) { request =>
-    Bar.create(request.body("name").head).map { bar =>
+  def createBar = Action.async(parse.formUrlEncoded) { implicit request =>
+    Bar.create(request.body("name").head).map { _ =>
       Redirect(routes.Application.index())
     }
   }
